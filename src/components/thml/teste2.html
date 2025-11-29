@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Acadêmica Simples</title>
+    <style>
+        /* Variáveis de Cores */
+        :root {
+            --bg-dark: #1e1e2d; /* Fundo principal escuro */
+            --card-bg: #2a2a3e; /* Fundo dos cartões e colunas */
+            --sidebar-bg: #2c2c43; /* Fundo da barra lateral */
+            --primary-color: #7b68ee; /* Roxo principal (cabeçalho, destaque) */
+            --text-light: #e0e0e0; /* Texto claro */
+            --danger: #ff6b6b; /* Vermelho para urgência */
+            --warning: #ffa500; /* Laranja para alerta */
+        }
+
+        /* Estilos Globais */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Container Principal */
+        .dashboard-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 1. Header */
+        .header {
+            background-color: var(--sidebar-bg);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--card-bg);
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .kpis {
+            display: flex;
+            gap: 25px;
+            font-size: 0.9em;
+        }
+
+        .kpi-item strong {
+            display: block;
+            font-size: 1.2em;
+            color: white;
+        }
+
+        /* 2. Conteúdo Principal (Sidebar + Kanban) */
+        .main-content {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        /* Sidebar (Navegação e Contexto) */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            padding: 20px;
+            border-right: 2px solid var(--card-bg);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            border-bottom: 1px solid var(--card-bg);
+            padding-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .discipline-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .discipline-list li {
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .badge {
+            background-color: var(--danger);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+
+        /* Calendário Simples (Mock) */
+        .calendar-mock {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .calendar-mock p {
+            margin: 5px 0 0 0;
+        }
+
+
+        /* Painel Kanban (Central) */
+        .kanban-panel {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+            overflow-x: auto; /* Permite scroll horizontal */
+        }
+
+        .kanban-column {
+            background-color: var(--card-bg);
+            min-width: 300px;
+            max-width: 300px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .kanban-column h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            text-align: center;
+            color: var(--primary-color);
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--bg-dark);
+        }
+
+        /* Cartão de Tarefa */
+        .task-card {
+            background-color: var(--bg-dark);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 5px solid; /* Cor da borda para a disciplina */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: grab;
+        }
+
+        .task-card.urgent { border-left-color: var(--danger); }
+        .task-card.test { border-left-color: #6495ed; } /* Azul para provas */
+        .task-card.default { border-left-color: var(--warning); }
+
+        .task-card h4 {
+            margin: 0 0 5px 0;
+            font-size: 1em;
+            color: white;
+        }
+
+        .task-card p {
+            margin: 0;
+            font-size: 0.85em;
+        }
+
+        .due-date {
+            font-weight: bold;
+            color: var(--warning);
+            margin-top: 5px;
+            display: block;
+        }
+
+        .urgent .due-date {
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+
+        <header class="header">
+            <h1>Semestre 2025.2</h1>
+            <div class="kpis">
+                <div class="kpi-item">
+                    <span>Progresso do Semestre</span>
+                    <strong>75%</strong>
+                </div>
+                <div class="kpi-item">
+                    <span>Próxima Prova</span>
+                    <strong style="color: #6495ed;">Cálculo I (03 Dez)</strong>
+                </div>
+                <div class="kpi-item">
+                    <span>Próxima Entrega</span>
+                    <strong style="color: var(--danger);">Relatório Lab (30 Nov)</strong>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            
+            <aside class="sidebar">
+                <h3>📅 Contexto Acadêmico</h3>
+                
+                <div class="calendar-mock">
+                    <p style="color: var(--primary-color);">Novembro 2025</p>
+                    <p>Prazos em **30** e **03**</p>
+                </div>
+                
+                <div class="discipline-list">
+                    <h3>📚 Minhas Disciplinas</h3>
+                    <ul>
+                        <li>Cálculo I <span class="badge">2</span></li>
+                        <li>História Moderna <span class="badge">1</span></li>
+                        <li>Lab. de Física <span class="badge">3</span></li>
+                        <li>Projeto Integrador <span class="badge">1</span></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <main class="kanban-panel">
+                
+                <div class="kanban-column">
+                    <h2>Entrega Imediata (Até 7 dias)</h2>
+                    <div class="task-card urgent">
+                        <h4>📝 Relatório de Laboratório</h4>
+                        <p>Disciplina: Lab. de Física</p>
+                        <span class="due-date">Vence em: 2 dias (30/11)</span>
+                    </div>
+                    <div class="task-card urgent">
+                        <h4>📝 Projeto Final - Módulo 1</h4>
+                        <p>Disciplina: Projeto Integrador</p>
+                        <span class="due-date">Vence em: 3 dias (01/12)</span>
+                    </div>
+                </div>
+
+                <div class="kanban-column">
+                    <h2>Provas Próximas (Semana)</h2>
+                    <div class="task-card test">
+                        <h4>🧠 Prova A2</h4>
+                        <p>Disciplina: Cálculo I</p>
+                        <span class="due-date">Data: 03/12</span>
+                    </div>
+                    <div class="task-card test">
+                        <h4>🧠 Quiz sobre Iluminismo</h4>
+                        <p>Disciplina: História Moderna</p>
+                        <span class="due-date">Data: 05/12</span>
+                    </div>
+                </div>
+
+                <div class="kanban-column">
+                    <h2>Planejamento (Baixa Urgência)</h2>
+                    <div class="task-card default">
+                        <h4>📚 Leitura Cap. 5</h4>
+                        <p>Disciplina: História Moderna</p>
+                        <span class="due-date">Vence em: 15/12</span>
+                    </div>
+                    <div class="task-card default">
+                        <h4>📝 Exercícios de Cinemática</h4>
+                        <p>Disciplina: Lab. de Física</p>
+                        <span class="due-date">Vence em: 10/12</span>
+                    </div>
+                </div>
+
+                <div class="kanban-column">
+                    <h2>✅ Concluído</h2>
+                    <div class="task-card" style="opacity: 0.6; border-left-color: #3cb371;">
+                        <h4>📝 Entrega do Resumo</h4>
+                        <p>Disciplina: Cálculo I</p>
+                        <span class="due-date">Concluído em: 20/11</span>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+    </div>
+
+</body>
+</html>
